@@ -82,7 +82,11 @@
         }
 
         // get api credentials
-        var payload = Platform.Function.ParseJSON(DecryptSymmetric(setup.credentials,"AES",libKeys.symmetric,null,libKeys.salt,null,libKeys.vector)),
+        var payload = Platform.Function.ParseJSON(DecryptSymmetric(setup.credentials,"AES",libKeys.symmetric,null,libKeys.salt,null,libKeys.vector));
+        var mid = Platform.Recipient.GetAttributeValue('memberid');
+        if (mid != null) {
+            payload.account_id = mid;
+        }
             req = httpRequest("POST", setup.authBaseURI + "v2/token", "application/json", payload);
 
         if (req.status == 200) {
